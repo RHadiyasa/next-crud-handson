@@ -46,3 +46,53 @@ export const saveContact = async (prevState: any, formData: FormData) => {
   revalidatePath("/contacts");
   redirect("/contacts");
 };
+
+export const updateContact = async (
+  id: string,
+  prevState: any,
+  formData: FormData
+) => {
+  const validatedFields = ContactSchema.safeParse(
+    Object.fromEntries(formData.entries())
+  );
+
+  console.log(validatedFields);
+
+  // Jika data tidak valid
+  if (!validatedFields.success) {
+    return {
+      Error: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  // Jika data valid
+  // Validasi agar data yang masuk ke database adalah data yang valid
+  // Validasi menggunakan zod
+
+  try {
+    await prisma.contact.update({
+      data: {
+        name: validatedFields.data.name,
+        phone: validatedFields.data.phone,
+      },
+      where: { id },
+    });
+  } catch (error) {
+    return {
+      message: "Failed to save update data",
+    };
+  }
+
+  // revalidate
+  revalidatePath("/contacts");
+  redirect("/contacts");
+};
+
+export const deleteContact = async (id: string) => {
+  await prisma.contact.delete({
+    where: { id },
+  });
+  
+  revalidatePath("/contacts");
+  redirect("/contacts");
+};
