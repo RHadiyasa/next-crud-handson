@@ -1,7 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import React from "react";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import { IoAddSharp } from "react-icons/io5";
+import { useFormStatus } from "react-dom";
+import clsx from "clsx";
 
 interface ButtonProps {
   text: string;
@@ -38,5 +42,27 @@ export const DeleteButton = () => {
     >
       <BiTrash />
     </Link>
+  );
+};
+
+export const SubmitButton = ({ label }: { label: string }) => {
+  const { pending } = useFormStatus();
+  const className = clsx(
+    "w-full text-white bg-blue-400 hover:bg-blue-500 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center",
+    { "opacity-50 cursor-progress": pending }
+  );
+
+  return (
+    <button
+      type="submit"
+      className={className}
+      disabled={pending}
+    >
+      {label === "save" ? (
+        <span>{pending ? "Saving..." : "Save"}</span>
+      ) : (
+        <span>{pending ? "Updating..." : "Update"}</span>
+      )}
+    </button>
   );
 };
