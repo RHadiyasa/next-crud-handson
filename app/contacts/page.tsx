@@ -1,4 +1,4 @@
-import Button from "@/components/Button";
+import { CreateButton } from "@/components/Button";
 import ContactTable from "@/components/ContactTable";
 import Search from "@/components/Search";
 import React from "react";
@@ -8,7 +8,7 @@ const Contacts = () => {
     <div className="max-w-screen-md mx-auto mt-5">
       <div className="flex items-center justify-between gap-1 mb-5">
         <Search />
-        <Button text="Create" />
+        <CreateButton text="Create" />
       </div>
       <ContactTable />
     </div>
